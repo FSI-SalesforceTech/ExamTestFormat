@@ -13,7 +13,7 @@ export default class examTestFormat extends LightningElement {
     @track existExam;
     @track selectedExam;
     @track examdatas = [];
-    @track answers;
+    //@track answers;
     @track columns = columns;
     @track isUnderTest = false;
     examtemp = [];
@@ -48,6 +48,13 @@ export default class examTestFormat extends LightningElement {
     async startExamFormat() {
         this.examtemp = await geteqQuestions({'examname': this.selectedExam});
         this.examdatas = [];
+        this.passedNum = 0;
+        this.passedPer = 0;
+        this.examnumber = 0;
+        this.progressnum = 0;
+        this.dispnum = 1;
+        this.isMark = false;
+        this.selectedExam = undefined;
 
         this.examtemp.forEach(element => {
                 geteqAnswers({'Id': element.Id})
