@@ -13,7 +13,6 @@ export default class examTestFormat extends LightningElement {
     @track existExam;
     @track selectedExam;
     @track examdatas = [];
-    //@track answers;
     @track columns = columns;
     @track isUnderTest = false;
     examtemp = [];
@@ -29,6 +28,11 @@ export default class examTestFormat extends LightningElement {
     @track passedNum = 0;
     @track passedPer = 0;
     @track isDrawing = false;
+    @track wireExam;
+    nextId;
+    @track isNext = false;
+
+    @wire(geteqAnswers, {Id: '$nextId'}) wireExam;
 
     connectedCallback() {
         getExistExam()
@@ -55,6 +59,7 @@ export default class examTestFormat extends LightningElement {
         this.dispnum = 1;
         this.isMark = false;
         this.selectedExam = undefined;
+        this.isNext = false;
 
         this.examtemp.forEach(element => {
                 geteqAnswers({'Id': element.Id})
@@ -71,17 +76,27 @@ export default class examTestFormat extends LightningElement {
     }
 
     handleNext() {
-        this.isDrawing = true;
-                
-        this.examdatas[this.examnumber]['selected'] = this.selectedanswer;
-        this.examnumber ++;
-        this.dispnum = this.examnumber + 1;
-        if(this.dispnum === this.totalnum) {
-            this.isMark = true;
+        try{
+            this.isDrawing = true;
+            
+            this.examdatas[this.examnumber]['selected'] = this.selectedanswer;
+            this.examnumber ++;
+            this.dispnum = this.examnumber + 1;
+            if(this.dispnum === this.totalnum) {
+                this.isMark = true;
+            }
+            this.progressnum = Math.floor((100 / this.totalnum) * this.dispnum);
+            this.dispExam = this.examdatas[this.examnumber];
+            if(this.isNext === false) {
+                this.isNext = true;
+            }
+            this.isDrawing = false;
+            this.nextId = this.dispExam.exam.Id;
+            this.selectedRows = [];
+            return refreshApex(this.wireExam);
+        } catch(exception) {
+
         }
-        this.progressnum = Math.floor((100 / this.totalnum) * this.dispnum);
-        this.dispExam = this.examdatas[this.examnumber];
-        this.isDrawing = false;
     }
 
     handlePrevious() {

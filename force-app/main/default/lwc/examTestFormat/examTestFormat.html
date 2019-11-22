@@ -39,13 +39,23 @@
                         <hr>
                         <p><lightning-formatted-text value={dispExam.exam.Detail__c}></lightning-formatted-text></p>
                         <br>
-                        <lightning-datatable
-                            key-field="id"
-                            data={dispExam.selection}
-                            onrowselection={handleRowAction}
-                            columns={columns}
-                            selected-rows={selectedRows}
-                        ></lightning-datatable>
+                        <template if:false={isNext}>
+                            <lightning-datatable
+                                key-field="id"
+                                data={dispExam.selection}
+                                onrowselection={handleRowAction}
+                                columns={columns}
+                            ></lightning-datatable>
+                        </template>
+                        <template if:true={isNext}>
+                            <lightning-datatable
+                                key-field="id"
+                                data={wireExam.data}
+                                onrowselection={handleRowAction}
+                                columns={columns}
+                                selected-rows={selectedRows}
+                            ></lightning-datatable>
+                        </template>
                         <br>
                         <template if:false={isMark}>
                             <lightning-layout>
@@ -108,7 +118,7 @@
         </center>
         <br>
         <table class="slds-table slds-table_resizable-cols slds-table_bordered">
-            <thead>
+            <thead align="center">
                 <tr class="slds-line-height_reset">
                     <th class="slds-size--1-of-5" scope="col">
                         <div class="slds-truncate" title="Answer">結果</div>
